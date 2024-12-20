@@ -1,0 +1,6 @@
+[font]
+# normal = {family="Terminus", style="Regular"}
+size = 20.0
+
+[window]
+opacity = 0.8
