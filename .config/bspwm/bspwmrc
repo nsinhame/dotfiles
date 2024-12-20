@@ -1,0 +1,73 @@
+#! /bin/sh
+
+export PATH="/home/nik/.local/bin:$PATH"
+
+# xrandr --output eDP --primary --mode 1366x768 --pos 0x0 --rotate normal --output HDMI-A-0 --mode 1280x768 --pos 1366x0 --rotate normal
+
+# Old ext monitor setup where monitor is in left side.
+# xrandr --output eDP --primary --mode 1366x768 --pos 1920x0 --rotate normal --output HDMI-A-0 --mode 1920x1080 --pos 0x0 --rotate normal
+
+# anany monitor setup
+# xrandr --output HDMI-A-0 --mode 1280x960 --rate 60 --pos 0x0 --rotate normal --output eDP --primary --mode 1366x768 --rate 60 --pos 1280x0 --rotate normal 
+
+# xrandr --output eDP --primary --mode 1366x768 --pos 0x0 --rotate normal --output HDMI-A-0 --mode 1920x1080 --pos 1366x0 --rotate normal
+
+pgrep -x sxhkd > /dev/null || sxhkd &
+
+bspc monitor -d 1 2 3 4 5 6 7 8 9 0
+
+# bspc monitor HDMI-A-0 -d 1 2 3 4 5 6
+# bspc monitor eDP -d 7 8 9 0
+
+bspc config border_width         0
+bspc config window_gap           0
+
+bspc config split_ratio          0.70
+bspc config borderless_monocle   true
+bspc config gapless_monocle      true
+
+bspc rule -a Gimp desktop='^8' state=floating follow=on
+bspc rule -a Chromium desktop='^7'
+bspc rule -a mplayer2 state=floating
+bspc rule -a Kupfer.py focus=on
+bspc rule -a Screenkey manage=off
+bspc rule -a firefox desktop='^1' follow=on
+bspc rule -a TelegramDesktop desktop='^10' follow=off
+bspc rule -a Chromium-browser desktop='^9' follow=off
+bspc rule -a transmission-gtk desktop='^8' follow=off
+bspc rule -a Emacs desktop=^3 state=fullscreen
+
+
+dunst &
+
+# xrandr --output eDP --brightness 0.2
+wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.9
+
+feh --bg-scale --randomize /home/nik/pics/wall/*
+
+picom &
+
+if [ ! -e /tmp/startup_completed ]; then
+    
+    # flatpak run org.telegram.desktop &
+    # sleep 0.5
+    # flatpak run com.github.Eloston.UngoogledChromium &
+    # sleep 0.5
+    # flatpak run com.transmissionbt.Transmission &
+    # sleep 0.5
+    firefox &
+    sleep 0.5
+    touch /tmp/startup_completed
+fi
+
+# bspc rule -a firefox -o desktop=focused && firefox https://web.telegram.org/ &
+# the above code did not work. I was trying to open telegram as web app on the 10th desktop on startup. Better luck next time.
+sleep 1
+
+sleep 1
+batterynotify &
+
+# To decrease the brightness of external monitor
+# xrandr --output HDMI-A-0  --brightness 0.2
+
+setxkbmap -option ctrl:ralt_rctrl
