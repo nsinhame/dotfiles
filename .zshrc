@@ -117,9 +117,9 @@ alias s="sxiv"
 alias n="nvim"
 alias v="vim"
 alias m="mpv"
-alias ga="git add ."
+alias ga="git add"
 alias gc="git commit -m"
-alias gp="git push -u origin main"
+alias gp="git push -u origin master"
 
 
 # Making changes to save the history for longer time
