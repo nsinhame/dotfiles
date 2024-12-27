@@ -41,7 +41,8 @@ bspc rule -a Emacs desktop=^3 state=fullscreen
 dunst &
 
 # xrandr --output eDP --brightness 0.2
-wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.9
+brillo -S 0
+wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.7
 
 feh --bg-scale --randomize /home/nik/pics/wall/*
 
