@@ -1,0 +1,49 @@
+#!/bin/sh
+
+# Adjust the following variables as needed
+VOLUME_INCREMENT=0.1       # The amount to increase/decrease the volume by
+AUDIO_SINK="@DEFAULT_AUDIO_SINK@"   # The audio sink identifier
+
+# Get the current volume
+current_volume=$(wpctl get-volume "$AUDIO_SINK" | awk -F ': ' '{ print $2 }')
+
+
+# Function to increase the volume
+increase_volume() {
+  new_volume=$(awk -v current="$current_volume" -v incr="$VOLUME_INCREMENT" 'BEGIN { volume = current + incr; if (volume > 2) { volume = 2; } printf "%.2f", volume }')
+
+  wpctl set-volume "$AUDIO_SINK" $new_volume
+}
+
+# Function to decrease the volume
+decrease_volume() {
+  new_volume=$(awk -v current="$current_volume" -v decr="$VOLUME_INCREMENT" 'BEGIN { volume = current - decr; if (volume < 0) { volume = 0; } printf "%.2f", volume }')
+
+  wpctl set-volume "$AUDIO_SINK" $new_volume
+}
+
+# Function to decrease the volume
+mute() {
+  wpctl set-volume "$AUDIO_SINK" 0
+}
+
+send_notification() {
+    new_volume=$(wpctl get-volume "$AUDIO_SINK" | awk '/Volume:/ {print $2}')
+    multiplied_volume=$(awk -v volume="$new_volume" 'BEGIN{ printf "%.0f", volume * 50 }')
+    dunstify -a "changeVolume" -u low -r 9993 -h int:value:"$multiplied_volume" "Volume: $multiplied_volume%" -t 2000
+}
+
+case $1 in
+up)
+	increase_volume
+	send_notification
+	;;
+down)
+	decrease_volume
+	send_notification
+	;;
+mute)
+	mute	
+	send_notification
+	;;
+esac
