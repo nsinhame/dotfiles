@@ -32,3 +32,22 @@ then use GNU stow to create symlinks
 ```
 $ stow .
 ```
+
+
+### For Brillo
+
+Add following lines to /etc/udev/rules.d/backlight.rules
+
+```
+RUN+="/bin/chgrp wheel /sys/class/backlight/amdgpu_bl1/brightness"
+RUN+="/bin/chmod g+w /sys/class/backlight/amdgpu_bl1/brightness"
+```
+
+and for intel
+
+```
+RUN+="/bin/chgrp wheel /sys/class/backlight/intel_backlight/brightness"
+RUN+="/bin/chmod g+w /sys/class/backlight/intel_backlight/brightness"
+```
+
+
