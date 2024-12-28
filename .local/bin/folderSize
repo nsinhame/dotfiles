@@ -1,4 +1,0 @@
-#!/bin/bash
-
-du -h | tail -n 1 | cut --fields=1
-
